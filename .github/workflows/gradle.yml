@@ -22,9 +22,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Set up Chrome
-        uses: browser-actions/setup-chrome@latest
+        uses: browser-actions/setup-chrome@v1  
         with:
-          chrome-version: 'latest'
+          chrome-version: 'latest-stable'
 
       - name: Run tests
         run: |
