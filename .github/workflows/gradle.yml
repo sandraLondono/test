@@ -28,7 +28,7 @@ jobs:
           echo "Chrome version: $(google-chrome --version)"
 
       - name: Generate Serenity Report
-        if: always() # Genera reporte incluso si fallan las pruebas
+        if: always()
         run: ./gradlew aggregate
 
       - name: Upload Serenity Report
