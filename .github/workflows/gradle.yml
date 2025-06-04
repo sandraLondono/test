@@ -27,12 +27,16 @@ jobs:
           sudo apt-get install -y google-chrome-stable
           echo "Chrome version: $(google-chrome --version)"
 
+      - name: Run Serenity Tests
+        run: ${{ github.event.inputs.gradle_command }}
+
       - name: Generate Serenity Report
         if: always()
         run: ./gradlew aggregate
 
       - name: Upload Serenity Report
-        uses: actions/upload-artifact@v3
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: serenity-report
           path: target/site/serenity
