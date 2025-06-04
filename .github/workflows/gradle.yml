@@ -1,0 +1,43 @@
+name: Run Serenity Tests with Chrome
+
+on:
+  workflow_dispatch:
+    inputs:
+      gradle_command:
+        description: 'Comando Gradle (ej: ./gradlew test -Dcucumber.filter.tags="@ttest")'
+        required: true
+        default: './gradlew test'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: 'latest'
+
+      - name: Run tests
+        run: |
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1920x1080x24 &
+          ${{ inputs.gradle_command }}
+
+      - name: Generate Serenity Report
+        if: always() # Genera reporte incluso si fallan las pruebas
+        run: ./gradlew aggregate
+
+      - name: Upload Serenity Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: serenity-report
+          path: target/site/serenity
