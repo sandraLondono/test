@@ -21,10 +21,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v1  
-        with:
-          chrome-version: 'latest-stable'
+      - name: Install Chrome (latest stable)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Verify Chrome version
+        run: google-chrome --version
 
       - name: Run tests
         run: |
